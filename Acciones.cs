@@ -11,13 +11,20 @@ namespace Exportar
     internal class Acciones
     {
         private List<Alumno> alumnolist = new List<Alumno>();
-
+        Correo correo = new Correo();
 
 
         public List<Alumno> Mostrar()
         {
-
-            return alumnolist;
+            try
+            {
+                return alumnolist;
+            }
+            catch (Exception ex)
+            {
+                correo.EnviarCorreo(ex.ToString());
+                throw;
+            }
         }
 
         public bool ExportarExcel()
@@ -30,7 +37,7 @@ namespace Exportar
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Alumnos");
-                    worksheet.Cell(1, 1).Value = "Nombre";
+                    worksheet.Cell(1, 0).Value = "Nombre";
                     worksheet.Cell(1, 2).Value = "Edad";
                     worksheet.Cell(1, 3).Value = "Carrera";
                     worksheet.Cell(1, 4).Value = "Matricula";
@@ -53,13 +60,11 @@ namespace Exportar
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return false;
+                correo.EnviarCorreo(ex.ToString());
+                throw;
             }
-
-
         }
 
         public bool Importar()
@@ -94,11 +99,12 @@ namespace Exportar
                 alumnolist = newList;
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return false;
+                correo.EnviarCorreo(ex.ToString());
+                throw;
             }
+
         }
     }
 
